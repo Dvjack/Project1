@@ -34,13 +34,13 @@ if __name__ == "__main__":
     #                 [13, 14, 15, 12]]
 
     # Small test
-    Matrix =        [[1, 0, 3], 
-                    [4, 5, 6], 
-                    [7, 2, 8]]
+    Matrix =        [[1, 2, 3], 
+                    [4, 8, 5], 
+                    [7, 6, 0]]
 
     # Smallest Test
-    # Matrix =        [[1, 2], 
-                    # [0, 3 ]]
+    # Matrix =        [[1, 3], 
+    #                 [0, 2 ]]
 
     
     
@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     # Turning the array into a list
 
-    State = Node_State_i.flatten()
+    State = list(Node_State_i.flatten())
     size = Node_State_i.shape[0]
     print(f'State is: {State}')
 
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     def find_blank_tile(array):
 
         # grab index of where the value of the index of the state is 0
-        blank_tile = np.where(array == 0)[0][0]
+        blank_tile = np.where(np.asarray(array) == 0)[0][0]
        
         # print(f'blank tile location is: {blank_tile}')
         
@@ -93,55 +93,75 @@ if __name__ == "__main__":
             # print(f'zero_loc: {zero_loc}')
 
             curr_state = parent_state.copy()
-            print(f'current State is: {curr_state}')
+            
             
             temp = curr_state[zero_loc]
             curr_state[zero_loc] = curr_state[next_pos_index]
             curr_state[next_pos_index] = temp
+            # print(f'current State is: {curr_state}')
+            # print(f'visited is: {visited}')
+
             # print(np.all(curr_state == visited[0]))
             # print(np.any(np.all(curr_state not in visited)))
 
-            # If the current state isn't visited then append it to the visited list and add it to the queue            
-            if np.any([np.any(curr_state != visited_i) for visited_i in visited]):
+            # If the current state isn't visited then append it to the visited list and add it to the queue     
+            # print(f' for loop {curr_state not in visited}')       
+            if curr_state not in visited:
 
                 visited.append(curr_state)
+                # print(f'Visited is: {visited}')
                 parent_q.put_nowait(curr_state)
 
                 # Let us know when we are at the goal state and return true
-                if np.all(curr_state == goal_state):
+                if curr_state == goal_state:
                     print("Goal has been reached")
                     print(f'Puzzle is: {curr_state}')
                     return True
         return False 
         
-    # Splitting the blank space index into rows and columns
-    blank_tile = find_blank_tile(State)
-    blank_tile_col =  blank_tile % size
-    # print(f'blank col is: {blank_tile_col}')
+   
     
-    blank_tile_row = (blank_tile//size) 
-    # print(f'blank row is: {blank_tile_row}')
-    
-    
-i =0
-while i<6:
+    try:
+        goal_reached = False
+        i =0
+        while not goal_reached:
 
-    print(f'I is:{i}')
-    parent_state = parent_q.get()
-    Action_Move(blank_tile_col,blank_tile_row, parent_state, (0,-1))
-    print(list(parent_q.queue))
-    Action_Move(blank_tile_col,blank_tile_row, parent_state, (0,1))
-    print(list(parent_q.queue))
-    Action_Move(blank_tile_col,blank_tile_row, parent_state, (-1,0))
-    print(list(parent_q.queue))
-    Action_Move(blank_tile_col,blank_tile_row, parent_state, (1,0))
+            print(f'I is:{i}')
+            print(list(parent_q.queue))
+            parent_state = parent_q.get_nowait()
+            
+
+            # Splitting the blank space index into rows and columns
+            blank_tile = find_blank_tile(parent_state)
+            blank_tile_col =  blank_tile % size
+            # print(f'blank col is: {blank_tile_col}')
+    
+            blank_tile_row = blank_tile//size 
+            # print(f'blank row is: {blank_tile_row}')
+            
+            
+            goal_reached = Action_Move(blank_tile_col,blank_tile_row, parent_state, (0,-1))
+           
+            goal_reached = Action_Move(blank_tile_col,blank_tile_row, parent_state, (0,1)) or goal_reached
+            
+            goal_reached = Action_Move(blank_tile_col,blank_tile_row, parent_state, (-1,0)) or goal_reached
+            
+            goal_reached = Action_Move(blank_tile_col,blank_tile_row, parent_state, (1,0)) or goal_reached
+
+            if parent_q.empty():
+                print("No Solution")
+
+                break
+           
+            
+
+            # print(f'Parent State is: {parent_state}')
+            i += 1
+    except KeyboardInterrupt:
+        exit()
+
     
 
-    print(f'Parent State is: {parent_state}')
-    i += 1
-
-    
-# else:
     # print("The Queue is empty")
     
             
