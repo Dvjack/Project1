@@ -2,6 +2,8 @@
 ENPM661 Project 1 INSTRUCTIONS
 DERRICK JACKSON
 
+LIBRARIES USED: Numpy, Queue
+
 Step 1: Open up anaconda prompt
 
 Step 2: Copy the path to where Project1.py is saved
