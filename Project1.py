@@ -40,8 +40,8 @@ if __name__ == "__main__":
     #                 [7, 6, 0]]
 
     # Smallest Test
-    # Matrix =        [[1, 3], 
-    #                 [0, 2 ]]
+    # Matrix =        [[0, 2], 
+    #                 [1, 3 ]]
 
     
     
@@ -166,27 +166,35 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         exit()
     
-    
-    
-    # current_state = goal_state
-    # while current_state != 0:
-    #     winning_index = visited.index(goal_state)
-    #     current_state = parent_visited[winning_index]
-    #     current_state = 
+    # printing the optimized path
+    my_path = []
+    j = 0
+    current_state = goal_state
+    print(f'Visited is: {visited}')
+    print(f'parent visited: {parent_visited}')
+    while current_state != 0:
+        print(f'J is {j}')
+        winning_index = visited.index(current_state)
+        print(f'win:{winning_index}')
+        print(parent_visited[winning_index])
+        my_path.append(current_state)
+        current_state = parent_visited[winning_index]
+        
+
+        j += 1
 
     #     print(f'current_state: {current_state}')
-
+    my_path.reverse()
     
     # Making the text file
     file = open("text_file.txt","w")
     file.write("Test Case 5 Matrix" '\n')  
     file.write("1  6  2  3  " '\n'"9  5  7  4  " '\n' "0  10  11  8" '\n' "13  14  15  12"'\n')
     file.write("Path is: " '\n')
-    for line in my_list: 
+    for line in my_path: 
         file.write(str(line) + '\n')
-    file.write(str(goal_state) + '\n')
     file.write("Total Number of iterations is: ")
-    file.write(str(i))
+    file.write(str(len(my_path)-1))
     file.close()
 
     os.system("text_file.txt")
