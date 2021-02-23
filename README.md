@@ -11,7 +11,7 @@ Step 2: Copy the path to where Project1.py is saved
 Step 3: type: cd [copied path] into the anaconda prompt
 
 Step 4: type: python Project1.py into the anaconda prompt
-	      This will provide you with the solution to the 5th test case. 
+	      This will provide you with the solution to the 5th test case, matrix of the 5th test case, and the total number of iterations to complete
 
 Step 5: Make sure to let everything finish running before exiting out of the windows to avoid any anaconda prompt errors. 
 
