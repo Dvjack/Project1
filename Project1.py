@@ -1,6 +1,7 @@
 # Here is project 1 for ENPM 661
 import numpy as np
 import queue as q
+import os 
 
 if __name__ == "__main__":
     # Test case 1
@@ -28,15 +29,15 @@ if __name__ == "__main__":
     #                 [13, 14, 15, 12]]
 
     # Test case 5
-    # Matrix =        [[1, 6, 2, 3], 
-    #                 [9, 5, 7, 4], 
-    #                 [0, 10, 11, 8], 
-    #                 [13, 14, 15, 12]]
+    Matrix =        [[1, 6, 2, 3], 
+                    [9, 5, 7, 4], 
+                    [0, 10, 11, 8], 
+                    [13, 14, 15, 12]]
 
     # Small test
-    Matrix =        [[1, 2, 3], 
-                    [4, 8, 5], 
-                    [7, 6, 0]]
+    # Matrix =        [[1, 2, 3], 
+    #                 [4, 8, 5], 
+    #                 [7, 6, 0]]
 
     # Smallest Test
     # Matrix =        [[1, 3], 
@@ -60,6 +61,7 @@ if __name__ == "__main__":
     goal_state.append(0)
     
     # Initializing the Queue and visited list
+    parent_visited = [0]
     visited = [State]
     parent_q = q.Queue()
     parent_q.put_nowait(State)
@@ -109,6 +111,7 @@ if __name__ == "__main__":
             if curr_state not in visited:
 
                 visited.append(curr_state)
+                parent_visited.append(parent_state)
                 # print(f'Visited is: {visited}')
                 parent_q.put_nowait(curr_state)
 
@@ -120,7 +123,8 @@ if __name__ == "__main__":
         return False 
         
    
-    
+    my_list = []
+
     try:
         goal_reached = False
         i =0
@@ -129,6 +133,7 @@ if __name__ == "__main__":
             print(f'I is:{i}')
             print(list(parent_q.queue))
             parent_state = parent_q.get_nowait()
+            my_list.append(parent_state)
             
 
             # Splitting the blank space index into rows and columns
@@ -152,6 +157,7 @@ if __name__ == "__main__":
                 print("No Solution")
 
                 break
+
            
             
 
@@ -159,6 +165,20 @@ if __name__ == "__main__":
             i += 1
     except KeyboardInterrupt:
         exit()
+
+    file = open("text_file.txt","w")
+    file.write("Test Case 5 Matrix" '\n')  
+    file.write("1  6  2  3  " '\n'"9  5  7  4  " '\n' "0  10  11  8" '\n' "13  14  15  12"'\n')
+    file.write("Path is: " '\n')
+    for line in my_list: 
+        file.write(str(line) + '\n')
+    file.write("Number of iterations is: ")
+    file.write(str(i))
+    file.close()
+
+    os.system("text_file.txt")
+
+
 
     
 
